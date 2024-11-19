@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户端</title>
+</head>
+
+<body>
+    <h1>客户端页面</h1>
+    <hr>
+    <div id="root"></div>
+    <button id="btn">点我加载数据</button>
+</body>
+<script>
+    const btn = document.getElementById("btn")
+    const root = document.getElementById("root")
+    btn.addEventListener("click", () => {
+        //创建xhr对象，xhr表示请求信息
+        const xhr = new XMLHttpRequest()
+        //设置请求信息
+        xhr.open("GET", "http://localhost:3000/students/")
+        //发送请求
+        xhr.send()
+        //设置响应体的类型
+        xhr.responseType = "json"
+        //读取相应信息
+        xhr.onload = () => { //加载完毕才读取
+            if (xhr.status === 200) {
+                const result = xhr.response
+                if (result.status === "ok") {
+                    console.log(result)
+                    const ul = document.createElement("ul")
+                    root.appendChild(ul)
+                    for (let stu of result.data) {
+                        console.log(stu)
+                        ul.insertAdjacentHTML(
+                            "beforeend",
+                            `<li>${stu.id} - ${stu.name} - ${stu.age} - ${stu.gender}</li>`
+                        )
+                    }
+                    
+                }
+            }
+        }
+    })
+
+</script>
+
+</html>

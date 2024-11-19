@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axios</title>
+    <script src = "https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <button id="btn"> Post请求</button>
+    <script>
+        const btn = document.getElementById("btn")
+        btn.addEventListener("click",()=>{
+            axios({
+                method:"post",
+                url:"http://localhost:3000/students",
+                data:{
+                    name:"苏五月",
+                    age:50,
+                    gender:"男"
+
+            }
+            }).then(res=>{
+            console.log(res.data)
+            }).catch(err=>{
+            console.log("出错了",err)
+            })
+        })
+       
+    </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户端</title>
+    <style>
+        table{
+            border-collapse: collapse;
+            width: 50%;
+        }
+        caption{
+            font-size: 25px;
+            font-weight: bold
+        }
+        thead th{
+            font-weight: 500;
+        }
+        tr,th{
+            font-weight: 300;
+            text-align: center;
+            font-size: 20px;
+            border: 1px solid rgb(0, 3, 2);
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1>客户端页面</h1>
+    <hr>
+    <div id="root"></div>
+    <button id="btn">点我加载数据</button>
+</body>
+<script>
+    const btn = document.getElementById("btn")
+    const root = document.getElementById("root")
+    btn.addEventListener("click", () => {
+        fetch("http://localhost:3000/students/")
+            .then((res) => {
+                if (res.status === 200) {
+                    return res.json() //此时是一个promise，要在后边的then读取
+                } else {
+                    throw new Error("加载失败"); //统一抛给后面的catch
+                }
+            })
+            .then((res) => {
+                if(res.status === "ok"){
+                    const table = document.createElement("table")
+                    root.appendChild(table)
+                    table.insertAdjacentHTML("beforeend","<caption>学生列表</caption>")
+                    table.insertAdjacentHTML("beforeend",
+                        `<thead>
+                            <tr>
+                                <th>学号</th>
+                                <th>年龄</th>
+                                <th>性别</th>
+                                <th>年龄</th>
+                            </tr>
+                        </thead>
+                    `)
+                    const tbody = document.createElement("tbody")
+                    table.appendChild(tbody)
+                    for(let stu of res.data){
+                        tbody.insertAdjacentHTML("beforeend",`
+                            <tr>
+                                <th>${stu.id}</th>
+                                <th>${stu.name}</th>
+                                <th>${stu.gender}</th>
+                                <th>${stu.age}</th>
+
+                            </tr>
+                        `)
+                    }
+                }
+                
+            })
+            .catch((err) => {
+                console.log("出错了！", err)
+            })
+    })
+</script>
+</html>
